@@ -14,6 +14,10 @@ class PermissionSeeder extends Seeder
     {
 //    	For permissions
         Permission::create([
+        	'name' => 'manage permissions',
+			'slug' => 'manage.permissions',
+		]);
+        Permission::create([
         	'name' => 'view permissions',
 			'slug' => 'view.permissions',
 		]);
@@ -32,6 +36,10 @@ class PermissionSeeder extends Seeder
 
 
 //        For roles
+        Permission::create([
+        	'name' => 'manage roles',
+			'slug' => 'manage.roles',
+		]);
         Permission::create([
         	'name' => 'view roles',
 			'slug' => 'view.roles',
@@ -52,7 +60,11 @@ class PermissionSeeder extends Seeder
 
 //        For users
         Permission::create([
-        	'name' => 'view users',
+        	'name' => 'manage users',
+			'slug' => 'manage.users',
+		]);
+		Permission::create([
+			'name' => 'view users',
 			'slug' => 'view.users',
 		]);
         Permission::create([

@@ -85,4 +85,15 @@ class User extends Authenticatable
 	}
 
 //	Todo: function appendRole
+
+	public function hasPermission(string $slug)
+	{
+		foreach ($this->roles()->get() as $role)
+		{
+			if ($role->hasPermission($slug))
+				return true;
+		}
+
+		return false;
+	}
 }
