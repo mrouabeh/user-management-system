@@ -20,3 +20,16 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+
+Route::namespace('Admin')
+	->name('admin.')
+	->prefix('admin')
+	->middleware('auth')
+	->group(function() {
+		Route::get('/', 'DefaultController@index')->name('index');
+
+		Route::resource('permissions', 'PermissionsController')->except('show');
+		Route::resource('roles', 'RolesController')->except('show');
+		Route::resource('users', 'UsersController');
+	});
