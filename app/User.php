@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Role;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -36,4 +37,52 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+	public function roles()
+	{
+		return $this->morphToMany('App\Role', 'rolable');
+	}
+
+	public function hasRole(string $role)
+	{
+		if ($this->roles()->where('name', $role)->exists())
+			return true;
+
+		return false;
+	}
+
+	public function hasAnyRoles(array $roles)
+	{
+		if ($this->roles()->whereIn('name', $roles)->exists())
+			return true;
+
+		return false;
+	}
+
+	public function setRole(string $role)
+	{
+		if (Role::where('name', $role)->exists())
+		{
+			$this->roles()->attach(Role::where('name', $role)->first());
+		}
+	}
+
+	public function setRoles(array $rolesName)
+	{
+		$roles = [];
+
+		foreach ($rolesName as $role) {
+			if (Role::where('name', $role)->exists())
+			{
+				$roles[] = Role::where('name', $role)->first()->id;
+			}
+		}
+
+		if (!empty($roles))
+		{
+			$this->roles()->sync($roles);
+		}
+	}
+
+//	Todo: function appendRole
 }
