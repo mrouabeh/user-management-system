@@ -14,7 +14,8 @@
 			</div>
 		</div>
 
-		<div class="row justify-content-center my-4"><div class="col-md-10">
+		<div class="row justify-content-center my-4">
+			<div class="col-md-10">
 				<table class="table table-striped table-bordered">
 					<thead class="thead-dark">
 					<tr>

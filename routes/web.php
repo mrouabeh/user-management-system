@@ -27,8 +27,6 @@ Route::namespace('Admin')
 	->prefix('admin')
 	->middleware('auth')
 	->group(function() {
-		Route::get('/', 'DefaultController@index')->name('index');
-
 		Route::resource('permissions', 'PermissionsController')->except('show');
 		Route::resource('roles', 'RolesController');
 		Route::resource('users', 'UsersController');

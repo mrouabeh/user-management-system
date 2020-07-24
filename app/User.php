@@ -96,4 +96,22 @@ class User extends Authenticatable
 
 		return false;
 	}
+
+	public function getPermissions()
+	{
+		$permissions = [];
+
+		foreach ($this->roles()->get() as $role)
+		{
+			foreach ($role->permissions()->get() as $permission)
+			{
+				if (!array_key_exists($permission->slug, $permissions))
+				{
+					$permissions[$permission->slug] = $permission;
+				}
+			}
+		}
+
+		return $permissions;
+	}
 }

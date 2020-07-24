@@ -35,8 +35,23 @@
                     <ul class="navbar-nav mr-auto">
 						@auth
 							@if(Auth::user()->hasRole('admin'))
-								<li class="nav-item">
-									<a class="nav-link" href="{{ route('admin.index') }}">Admin</a>
+								<li class="nav-item dropdown">
+{{--									<a class="nav-link" href="{{ route('admin.index') }}">Admin</a>--}}
+									<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+										Admin <span class="caret"></span>
+									</a>
+
+									<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+										<a class="dropdown-item" href="{{ route('admin.users.index') }}">
+											Users
+										</a>
+										<a class="dropdown-item" href="{{ route('admin.roles.index') }}">
+											Roles
+										</a>
+										<a class="dropdown-item" href="{{ route('admin.permissions.index') }}">
+											Permissions
+										</a>
+									</div>
 								</li>
 							@endif
 						@endauth
