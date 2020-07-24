@@ -35,7 +35,7 @@
 										{{ $permission->is_active ? "active" : "no active" }}
 									</span>
 								</td>
-								<td>
+								<td style="width: 25%">
 									<form action="{{ route('admin.permissions.destroy', $permission) }}" method="POST">
 										@csrf
 										@method('DELETE')

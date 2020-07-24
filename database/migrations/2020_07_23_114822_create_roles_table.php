@@ -17,6 +17,7 @@ class CreateRolesTable extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->boolean('is_active')->default(1);
+            $table->boolean('is_protected')->default(0);
         });
     }
 

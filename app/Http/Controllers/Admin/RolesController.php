@@ -3,73 +3,125 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StoreRole;
+use App\Http\Requests\Admin\UpdateRole;
+use App\Permission;
 use App\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class RolesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        if (Gate::allows('view.roles'))
+		{
+			$roles = Role::paginate(15);
+
+			return view('admin.roles.index', [
+				'roles' => $roles
+			]);
+		}
+
+		return redirect()->back();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        if (Gate::allows('create.roles'))
+		{
+			$permissions = Permission::all();
+
+			return view('admin.roles.create', [
+				'permissions' => $permissions
+			]);
+		}
+
+		return redirect()->back();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(StoreRole $request)
     {
-        //
+        if (Gate::allows('create.roles'))
+		{
+			$role = new Role();
+
+			$role->name = $request->name;
+			$role->is_active = $request->is_active ? 1 : 0;
+
+			$role->save();
+			if ($request->has('permissions'))
+			{
+				$role->permissions()->sync($request->permissions);
+			}
+
+			return redirect()->route('admin.roles.index');
+		}
+
+		return redirect()->back();
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Role  $role
-     * @return \Illuminate\Http\Response
-     */
+    public function show(Role $role)
+	{
+		if (Gate::allows('view.roles'))
+		{
+			return view('admin.roles.show', [
+				'role' => $role
+			]);
+		}
+
+		return redirect()->back();
+	}
+
     public function edit(Role $role)
     {
-        //
+        if (Gate::allows('edit.roles'))
+		{
+			$permissions = Permission::all();
+
+			return view('admin.roles.edit', [
+				'role' => $role,
+				'permissions' => $permissions
+			]);
+		}
+
+        return redirect()->back();
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Role  $role
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Role $role)
+    public function update(UpdateRole $request, Role $role)
     {
-        //
+        if (Gate::allows('edit.roles'))
+		{
+			if (!$role->is_protected)
+			{
+				$role->name = $request->name;
+				$role->is_active = $request->is_active ? 1 : 0;
+
+				$role->save();
+
+				if ($request->has('permissions'))
+				{
+					$role->permissions()->sync($request->permissions);
+				}
+				return redirect()->route('admin.roles.index');
+			}
+		}
+
+        return redirect()->back();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Role  $role
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Role $role)
     {
-        //
+        if (Gate::allows('delete.roles'))
+		{
+			if (!$role->is_protected)
+			{
+				$role->delete();
+
+				return redirect()->route('admin.roles.index');
+			}
+		}
+
+        return redirect()->back();
     }
 }

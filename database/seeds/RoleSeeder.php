@@ -13,8 +13,14 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        $user = Role::create(['name' => 'user']);
-        $admin = Role::create(['name' => 'admin']);
+        $user = Role::create([
+        	'name' => 'user',
+			'is_protected' => 1
+		]);
+        $admin = Role::create([
+        	'name' => 'admin',
+			'is_protected' => 1
+		]);
 
 //        Attach permissions to admin
 		$admin->setPermission('manage.permissions');
